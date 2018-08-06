@@ -6,6 +6,7 @@ namespace App;
 
 abstract class Model
 {
+    public static $key = null;
     public $id;
     public static $table = null;
 
@@ -13,9 +14,16 @@ abstract class Model
         $db = new Db();
         return $db->query('SELECT * FROM ' . static::$table, static::class);
     }
-//    public function execute($query,$params=[]){
-//        $sth = $this->dbh->prepare($query);
-//        $sth->execute();
-//    }
+
+    public static function findById($key)
+    {
+        static::$key = $key;
+        $db = new Db();
+        $res = $db->query('SELECT * FROM ' . static::$table . ' WHERE id=' . static::$key, static::class);
+        if (empty($res)) {
+            return false;
+        }
+        return $res;
+    }
 
 }
